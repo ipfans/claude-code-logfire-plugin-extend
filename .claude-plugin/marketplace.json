@@ -1,11 +1,11 @@
 {
-  "name": "pydantic-claude-code-logfire-plugin",
+  "name": "claude-code-logfire-plugin-extend",
   "owner": {
-    "name": "Pydantic",
-    "email": "engineering@pydantic.dev"
+    "name": "ipfans",
+    "email": "leon@get-pulse.ai"
   },
   "metadata": {
-    "description": "Claude Code plugin for Pydantic Logfire observability"
+    "description": "Claude Code plugin for Pydantic Logfire observability (fork with SessionEnd daemon fix)"
   },
   "plugins": [
     {
@@ -14,10 +14,10 @@
       "description": "Captures Claude Code sessions and exports pydantic-ai compatible OTel traces to Pydantic Logfire, with local JSONL fallback.",
       "version": "0.4.6",
       "author": {
-        "name": "Pydantic"
+        "name": "ipfans"
       },
       "homepage": "https://logfire.pydantic.dev",
-      "repository": "https://github.com/pydantic/claude-code-logfire-plugin",
+      "repository": "https://github.com/ipfans/claude-code-logfire-plugin-extend",
       "license": "MIT",
       "keywords": ["logfire", "opentelemetry", "observability", "tracing"],
       "category": "observability"

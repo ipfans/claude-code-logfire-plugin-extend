@@ -19,7 +19,8 @@ Each session becomes a trace with child spans per LLM API call, with full token 
 From within Claude Code, run:
 
 ```
-/install-github ipfans/claude-code-logfire-plugin-extend
+/plugin marketplace add ipfans/claude-code-logfire-plugin-extend
+/plugin install logfire-session-capture@claude-code-logfire-plugin-extend
 ```
 
 ### Set your Logfire token
