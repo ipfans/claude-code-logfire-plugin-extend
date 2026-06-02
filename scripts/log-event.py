@@ -1342,32 +1342,30 @@ def main() -> None:
     state_file = os.path.join(tmpdir, f"claude-logfire-{session_id}.json")
     lock_file = f"{state_file}.lock"
 
-    def _do_otlp_work() -> None:
-        if hook_event == "SessionStart":
-            handle_session_start(
-                inp,
-                state_file,
-                lock_file,
-                ts_nano,
-                transcript_path,
-                parent_span_id_from_env,
-                trace_id,
-                otlp_endpoint,
-                logfire_token,
-                session_id,
-            )
-        elif hook_event in ("Stop", "SubagentStop"):
-            handle_stop(
-                inp, state_file, lock_file, trace_id, ts_nano, transcript_path, otlp_endpoint, logfire_token, hook_event
-            )
-        elif hook_event == "SessionEnd":
-            handle_session_end(
-                inp, state_file, lock_file, trace_id, ts_nano, transcript_path, otlp_endpoint, logfire_token, session_id
-            )
-
-    # Fork OTLP work into a daemon so the hook process exits immediately
-    # and Claude Code never cancels us mid-flight.
-    _daemonize(_do_otlp_work)
+    if hook_event == "SessionStart":
+        handle_session_start(
+            inp,
+            state_file,
+            lock_file,
+            ts_nano,
+            transcript_path,
+            parent_span_id_from_env,
+            trace_id,
+            otlp_endpoint,
+            logfire_token,
+            session_id,
+        )
+    elif hook_event in ("Stop", "SubagentStop"):
+        handle_stop(
+            inp, state_file, lock_file, trace_id, ts_nano, transcript_path, otlp_endpoint, logfire_token, hook_event
+        )
+    elif hook_event == "SessionEnd":
+        # Daemonize only SessionEnd: Claude Code aggressively kills hook
+        # subprocesses during teardown, but the OTLP send takes seconds.
+        _daemonize(
+            handle_session_end,
+            inp, state_file, lock_file, trace_id, ts_nano, transcript_path, otlp_endpoint, logfire_token, session_id,
+        )
 
 
 if __name__ == "__main__":
